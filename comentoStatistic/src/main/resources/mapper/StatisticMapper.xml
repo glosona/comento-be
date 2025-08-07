@@ -18,4 +18,37 @@
         where left(ri.create_date, 4) = #{yearMonth};
     </select>
 
+
+    <select id="selectYearMonthDayLogin" parameterType="string" resultType="DayCountDto">
+        select concat('20', #{yearMonthDay}) as yearMonthDay, count(*) as totCnt
+        from statistic.request_info ri
+        where left(ri.create_date, 6) = #{yearMonthDay};
+    </select>
+
+    <select id="selectDayAverageLogin" parameterType="string" resultType="DayAverageCountDto">
+        select
+            count(*) as totCnt,
+            count(distinct left(create_date, 6)) as totDay,
+            round(count(*) * 1.0 / count(distinct left(create_date, 6)), 2) as dayAverage
+        from statistic.request_info ri;
+    </select>
+
+    <select id="selectMonthByDepartmentLogin" parameterType="string" resultType="MonthByDepartmentDto">
+        select
+            hr_organ as department,
+            concat('20', #{yearMonth}) as yearMonth,
+            count(#{yearMonth}) as totCnt
+        from request_info ri join user
+        on ri.user_id = user.user_id
+        where hr_organ = #{department} and left(ri.create_date, 4) = #{yearMonth};
+    </select>
+
+    <select id="selectNonHolidayLogin" parameterType="string" resultType="NonHolidayCountDto">
+        select
+            count(*) as totCnt,
+            count(case when dayofweek(str_to_date(create_date, '%y%m%d%H%i')) in (1, 2) then 1 end) as weekdayCnt,
+            count(case when dayofweek(str_to_date(create_date, '%y%m%d%H%i')) not in (1, 2) then 1 end) as nonHolydayCnt
+        from request_info ri;
+    </select>
+
 </mapper>
