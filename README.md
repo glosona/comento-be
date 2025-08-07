@@ -1,3 +1,73 @@
+# 3주차(08/07/25)
+## 3-1) 스프링 vs 스프링부트
+각각 환경설정을 진행하면서 느낀 차이점/공통점을 정리했다.
+### 공통점
+* Maven을 사용했기에 두 환경 모두 `pom.xml`을 통해 dependency를 관리한다.
+* DI, AOP, MVC 등 핵심 Spring 기능은 동일하게 사용된다.
+* `@Controller`, `@Service` 등의 공통 Spring 어노테이션을 사용할 수 있다.
+
+### 차이점
+* **서버 설정**: 스프링은 `jetty` build를 직접 pom에 작성 및 설정했으나, 스프링부트는 내장 `Tomcat`이 포함돼있기에 추가 설정 없이 바로 실행 가능했다.
+* **의존성 관리**: 스프링은 `pom.xml`의 의존성과 버전을 직접 수동으로 명시해야 했지만, 스프링부트는 `start.spring.io`에서 기본 pom과 구조를 자동 생성해줬다.
+* **Web 설정**: 스프링은 `applicationContext-webapp.xml`을 통해 servlet-context를 직접 설정했지만, 스프링 부트에서는 `@RestController` 등의 어노테이션 기반으로 자동 설정됐다.
+* **데이터소스 설정**: 스프링은 `applicationContext-datasource.xml` 등을 직접 작성해야 했으나, 스프링부트에서는 `application.properties`로 간단히 설정할 수 있었다.
+* **프로젝트 초기 구성**: 스프링은 구조/설정 파일을 직접 구성해야 했지만, 스프링부트는 `start.spring.io`로 Web, JPA, Lombok 등의 구성을 자동화할 수 있었다.
+
+더 알아보니 스프링부트는 내부적으로 BOM(Bill of Materials) 방식으로 의존성 버전을 통합 관리해 버전 충돌 가능성을 줄여준다고 한다.
+
+## [과제 보고]
+1. 스프링 환경과 스프링 부트 환경 비교 작성 ([# 3-1)](#3-1-스프링-vs-스프링부트))
+2. SW활용현황 API 중 연, 연월 기준 로그인 수 조회 API 개발
+   * YearCountDto.java, YearMonthCountDto.java 작성 
+    ```
+    localhost:8031/api/v1/logins/24
+    localhost:8031/api/v1/logins/24/04
+    ```
+3. 마지막 주차 API 구현에 필요한 SQL 작성
+   * 월별 접속자 수
+      ```mysql
+      SELECT
+        CONCAT('20', LEFT(create_date, 4)) AS month,
+        COUNT(*) AS totCnt
+      FROM request_info
+      WHERE LEFT(create_date, 4) = '2305';
+      ```
+   * 일자별 접속자 수
+     ```mysql
+     SELECT
+       CONCAT('20', LEFT(create_date, 6)) AS day,
+       COUNT(*) AS totCnt
+     FROM request_info
+     WHERE LEFT(create_date, 6) = '230531';
+     ```
+   * 평균 하루 로그인 수
+     ```mysql
+     SELECT
+       COUNT(DISTINCT LEFT(create_date, 6)) AS totDay,
+       COUNT(*) AS totCnt,
+       ROUND(COUNT(*) / COUNT(DISTINCT LEFT(create_date, 6)), 2) AS dayAverage
+     FROM request_info;
+     ```
+   * 휴일을 제외한 로그인 수(주말만 적용)
+     ```mysql
+     SELECT
+       COUNT(*) AS totCnt,
+       COUNT(CASE WHEN DAYOFWEEK(STR_TO_DATE(create_date, '%y%m%d%H%i')) IN (1, 2) THEN 1 END) AS weekdayCnt,
+       COUNT(CASE WHEN DAYOFWEEK(STR_TO_DATE(create_date, '%y%m%d%H%i')) NOT IN (1, 2) THEN 1 END) AS nonHolydayCnt
+     FROM request_info;
+     ```
+   * 부서별 월별 로그인 수
+     ```mysql
+     SELECT
+        CONCAT('20', LEFT(ri.create_date, 4)) AS yearMonth, 
+        hr_organ AS department, 
+        COUNT(LEFT(ri.create_date, 4)) AS totCnt
+     FROM request_info ri JOIN user
+     ON ri.user_id = user.user_id
+     WHERE hr_organ = 'A' and LEFT(ri.create_date, 4) = '2305';
+     ```
+
+
 # 2주차(07/31/25)
 ## 2-1) HTTP 통신이란?
 * HTTP(Hypertext Transfer Protocol)는 웹 브라우저와 서버가 하이퍼텍스트, 즉 웹 페이지의 내용을 주고받을 때 사용하는 규칙이다.
