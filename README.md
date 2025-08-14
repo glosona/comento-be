@@ -24,7 +24,7 @@
 3. @ControllerAdvice으로 validation 작성
    1. year, month, day 검토
    2. fromDate, toDate 검토
-4. API가이드 문서 보완
+4. API가이드 문서 보완: https://documenter.getpostman.com/view/46469267/2sB3BGJVgP#intro
 
 # 3주차(08/07/25)
 ## 3-1) 스프링 vs 스프링부트
