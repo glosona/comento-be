@@ -13,8 +13,13 @@ spring.datasource.url=jdbc:mariadb://localhost:3306/statistic
 spring.datasource.username=root
 spring.datasource.password=Mariadb!!Root1234
 
-# Mybatis mapper ?? ??
+# Mybatis mapper
 mybatis.mapper-locations= classpath:mapper/*.xml
 
-## xml?? result type? ????? ??? ? ??? alias ??
+## xml result typealias
 mybatis.type-aliases-package=com.demo.comentoStatistic.dto
+
+
+## OpenAPI - KAI Rest day
+openapi.restday.key=
+openapi.restday.url=https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService

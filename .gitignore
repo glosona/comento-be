@@ -3,3 +3,5 @@
 *.iws
 *.iml
 *.ipr
+
+/**/src/main/resources/application.properties
