@@ -4,6 +4,7 @@ import com.demo.comentoStatistic.dto.DayAverageCountDto;
 import com.demo.comentoStatistic.dto.LoginCountDto;
 import com.demo.comentoStatistic.dto.NonRestdayCountDto;
 import com.demo.comentoStatistic.service.StatisticService;
+import com.demo.comentoStatistic.util.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,8 @@ public class StatisticController {
             @RequestParam(required = false) String day
             ) {
 
+        ValidationUtil.validateDate(year, month, day);
+
         return ResponseEntity.ok(statisticService.getLogins(year, month, day));
     }
 
@@ -32,6 +35,8 @@ public class StatisticController {
             @RequestParam(required = false) String month,
             @RequestParam(required = false) String day
     ){
+
+        ValidationUtil.validateDate(year, month, day);
 
         return ResponseEntity.ok(statisticService.getByDepartmentLogins(year, month, day, department));
     }
@@ -47,6 +52,9 @@ public class StatisticController {
     public ResponseEntity<NonRestdayCountDto>  getNonRestdayLoginCount(
             @RequestParam String fromDate,
             @RequestParam String toDate) {
+
+        ValidationUtil.validDateString(fromDate, "fromDate");
+        ValidationUtil.validDateString(toDate, "toDate");
 
         return ResponseEntity.ok(statisticService.getNonRestdayLogins(fromDate, toDate));
     }
