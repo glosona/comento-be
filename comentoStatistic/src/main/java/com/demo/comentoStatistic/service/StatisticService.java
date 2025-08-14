@@ -5,11 +5,17 @@ import com.demo.comentoStatistic.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class StatisticService {
 
     @Autowired
     StatisticMapper statisticMapper;
+
+    @Autowired
+    RestdayService restdayService;
+
 
     public YearCountDto getYearLogins(String year){
 
@@ -36,9 +42,18 @@ public class StatisticService {
         return statisticMapper.selectMonthByDepartmentLogin(year+month, department);
     }
 
-    public NonHolidayCountDto getNonHolidayLogins(String year){
+    public NonRestdayCountDto getNonRestdayLogins(String fromDate, String toDate) {
+        restdayService.getRestdaysInRange(fromDate, toDate);
 
-        return statisticMapper.selectNonHolidayLogin(year);
+        return statisticMapper.selectNonRestdayLogin(fromDate, toDate);
     }
 
+    public NonRestdayCountDto getAllNonRestdayLogins(){
+        Map<String, String> dateMap = statisticMapper.selectMinMaxCreateDate();
+        String fromDate = dateMap.get("fromDate");
+        String toDate = dateMap.get("toDate");
+        restdayService.getRestdaysInRange(fromDate, toDate);
+
+        return statisticMapper.selectNonRestdayLogin(fromDate, toDate);
+    }
 }

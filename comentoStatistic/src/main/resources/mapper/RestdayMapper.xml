@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.demo.comentoStatistic.dao.RestdayMapper">
+    <insert id="insertRestday" parameterType="com.demo.comentoStatistic.dto.RestdayDto">
+        INSERT IGNORE INTO restdays (locdate, name)
+        VALUES
+        <foreach collection="body.items.item" item="i" separator=",">
+             (#{i.locdate}, #{i.dateName})
+        </foreach>
+    </insert>
+</mapper>

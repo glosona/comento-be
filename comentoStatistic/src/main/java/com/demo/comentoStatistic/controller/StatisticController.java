@@ -4,30 +4,41 @@ import com.demo.comentoStatistic.dto.YearCountDto;
 import com.demo.comentoStatistic.service.StatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@RequestMapping("/api/v1/logins")
 public class StatisticController {
 
     @Autowired
     StatisticService statisticService;
 
 
-    @RequestMapping(value="/api/v1/logins/{year}", produces = "application/json")
+    @RequestMapping(value = "/{year}", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<YearCountDto> getYearLoginCount(@PathVariable("year") String year){
+    public ResponseEntity<YearCountDto> getYearLoginCount(@PathVariable("year") String year) {
 
         return ResponseEntity.ok(statisticService.getYearLogins(year));
     }
 
-    @RequestMapping(value="/api/v1/logins/{year}/{month}", produces = "application/json")
+    @RequestMapping(value = "/{year}/{month}", produces = "application/json")
     @ResponseBody
-    public Object getYearMonthLoginCount(@PathVariable("year") String year, @PathVariable("month") String month){
+    public Object getYearMonthLoginCount(@PathVariable("year") String year, @PathVariable("month") String month) {
 
         return ResponseEntity.ok(statisticService.getYearMonthLogins(year, month));
     }
 
+    @GetMapping("/nonRestday")
+    public Object getNonRestdayLoginCount(
+            @RequestParam String fromDate,
+            @RequestParam String toDate) {
+
+        return ResponseEntity.ok(statisticService.getNonRestdayLogins(fromDate, toDate));
+    }
+
+    @GetMapping("/nonRestday/all")
+    public Object getAllNonRestdayLoginCount() {
+
+        return ResponseEntity.ok(statisticService.getAllNonRestdayLogins());
+    }
 }

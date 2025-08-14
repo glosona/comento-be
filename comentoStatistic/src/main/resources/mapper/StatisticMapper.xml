@@ -43,12 +43,32 @@
         where hr_organ = #{department} and left(ri.create_date, 4) = #{yearMonth};
     </select>
 
-    <select id="selectNonHolidayLogin" parameterType="string" resultType="NonHolidayCountDto">
+    <select id="selectNonRestdayLogin" parameterType="string" resultType="NonRestdayCountDto">
         select
-            count(*) as totCnt,
-            count(case when dayofweek(str_to_date(create_date, '%y%m%d%H%i')) in (1, 2) then 1 end) as weekdayCnt,
-            count(case when dayofweek(str_to_date(create_date, '%y%m%d%H%i')) not in (1, 2) then 1 end) as nonHolydayCnt
-        from request_info ri;
+            #{fromDate} as fromDate,
+            #{toDate} as toDate,
+            count(*) as originCnt,
+            count(case
+                when rd.locdate is not null
+                         or dayofweek(str_to_date(ri.create_date, '%y%m%d%H%i')) in (1, 7)
+                    then 1 end) as restCnt,
+            count(case
+                when rd.locdate is null
+                         and dayofweek(str_to_date(create_date, '%y%m%d%H%i')) not in (1, 7)
+                    then 1 end) as totCnt
+        from request_info ri
+        left join restdays rd
+            on left(ri.create_date, 6) = right(rd.locdate, 6)
+        where str_to_date(ri.create_date, '%y%m%d%H%i')
+            between str_to_date(#{fromDate}, '%Y%m%d')
+            and str_to_date(#{toDate}, '%Y%m%d');
+    </select>
+
+    <select id="selectMinMaxCreateDate" resultType="map">
+        SELECT
+            date_format(min(str_to_date(create_date, '%y%m%d%H%i')), '%Y%m%d') as fromDate,
+            date_format(max(str_to_date(create_date, '%y%m%d%H%i')), '%Y%m%d') as toDate
+        FROM request_info
     </select>
 
 </mapper>

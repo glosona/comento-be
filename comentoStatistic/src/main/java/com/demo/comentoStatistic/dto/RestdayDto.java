@@ -41,7 +41,7 @@ public class RestdayDto {
     @Getter
     @Setter
     public static class Item {
-        private int locdate;
+        private String locdate;
         private String dateName;
         private String isHoliday;
         private int seq;
