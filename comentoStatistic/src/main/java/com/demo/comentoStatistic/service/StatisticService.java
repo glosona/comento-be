@@ -16,20 +16,15 @@ public class StatisticService {
     @Autowired
     RestdayService restdayService;
 
+    public LoginCountDto getLogins(String year, String month, String day) {
 
-    public LoginCountDto getYearLogins(String year) {
-
-        return statisticMapper.selectYearLogin(year);
-    }
-
-    public LoginCountDto getYearMonthLogins(String year, String month) {
-
-        return statisticMapper.selectYearMonthLogin(year, month);
-    }
-
-    public LoginCountDto getYearMonthDayLogins(String year, String month, String day) {
-
-        return statisticMapper.selectYearMonthDayLogin(year, month, day);
+        if (month == null && day == null) {
+            return statisticMapper.selectYearLogin(year);
+        } else if (day == null) {
+            return statisticMapper.selectYearMonthLogin(year, month);
+        } else {
+            return statisticMapper.selectYearMonthDayLogin(year, month, day);
+        }
     }
 
     public DayAverageCountDto getDayAverageLogins() {

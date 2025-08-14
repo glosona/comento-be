@@ -21,13 +21,7 @@ public class StatisticController {
             @RequestParam(required = false) String day
             ) {
 
-        if (month == null && day == null) {
-            return ResponseEntity.ok(statisticService.getYearLogins(year));
-        } else if (day == null) {
-            return ResponseEntity.ok(statisticService.getYearMonthLogins(year, month));
-        } else {
-            return ResponseEntity.ok(statisticService.getYearMonthDayLogins(year, month, day));
-        }
+        return ResponseEntity.ok(statisticService.getLogins(year, month, day));
     }
 
 //    @GetMapping("department")
