@@ -15,7 +15,7 @@ public class StatisticController {
     StatisticService statisticService;
 
     @GetMapping()
-    public ResponseEntity<LoginCountDto>  getLoginCount(
+    public ResponseEntity<LoginCountDto> getLoginCount(
             @RequestParam String year,
             @RequestParam(required = false) String month,
             @RequestParam(required = false) String day
@@ -24,18 +24,18 @@ public class StatisticController {
         return ResponseEntity.ok(statisticService.getLogins(year, month, day));
     }
 
-//    @GetMapping("department")
-//    public Object getLoginCountByDepartment(
-//            @RequestParam String name,
-//            @RequestParam(required = false) String year,
-//            @RequestParam(required = false, defaultValue = "01") String month,
-//            @RequestParam(required = false, defaultValue = "01") String day
-//    ){
-//
-//    }
+    @GetMapping("department/{department}")
+    public Object getLoginCountByDepartment(
+            @PathVariable String department,
+            @RequestParam(required = false) String year,
+            @RequestParam(required = false) String month,
+            @RequestParam(required = false) String day
+    ){
 
+        return ResponseEntity.ok(statisticService.getByDepartmentLogins(year, month, day, department));
+    }
 
-    @GetMapping("/nonRestday")
+    @GetMapping("nonRestday")
     public ResponseEntity<NonRestdayCountDto>  getNonRestdayLoginCount(
             @RequestParam String fromDate,
             @RequestParam String toDate) {
@@ -43,7 +43,7 @@ public class StatisticController {
         return ResponseEntity.ok(statisticService.getNonRestdayLogins(fromDate, toDate));
     }
 
-    @GetMapping("/nonRestday/all")
+    @GetMapping("nonRestday/all")
     public ResponseEntity<NonRestdayCountDto> getAllNonRestdayLoginCount() {
 
         return ResponseEntity.ok(statisticService.getAllNonRestdayLogins());

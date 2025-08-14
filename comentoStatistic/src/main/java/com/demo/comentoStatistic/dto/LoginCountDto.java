@@ -16,7 +16,5 @@ public class LoginCountDto {
     private String month;
     private String day;
 
-    private String department;
-
     private int totCnt;
 }

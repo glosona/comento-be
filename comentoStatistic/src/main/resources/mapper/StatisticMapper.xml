@@ -32,14 +32,47 @@
         where concat('20', left(ri.create_date, 6)) =  concat(#{year}, #{month}, #{day});
     </select>
 
-    <select id="selectMonthByDepartmentLogin" parameterType="string" resultType="MonthByDepartmentDto">
+    <select id="selectYearByDepartmentLogin" parameterType="string" resultType="ByDepartmentCountDto">
         select
             hr_organ as department,
-            concat('20', #{yearMonth}) as yearMonth,
-            count(#{yearMonth}) as totCnt
+            #{year} as year,
+            count(*) as totCnt
         from request_info ri join user
                                   on ri.user_id = user.user_id
-        where hr_organ = #{department} and left(ri.create_date, 4) = #{yearMonth};
+        where hr_organ = #{department} and concat('20', left(ri.create_date, 2)) = #{year};
+    </select>
+
+    <select id="selectYearMonthByDepartmentLogin" parameterType="string" resultType="ByDepartmentCountDto">
+        select
+            hr_organ as department,
+            #{year} as year,
+            #{month} as month,
+            count(*) as totCnt
+        from request_info ri join user
+                                  on ri.user_id = user.user_id
+        where hr_organ = #{department} and concat('20', left(ri.create_date, 4)) = concat(#{year}, #{month});
+    </select>
+
+
+    <select id="selectYearMonthDayByDepartmentLogin" parameterType="string" resultType="ByDepartmentCountDto">
+        select
+            hr_organ as department,
+            #{year} as year,
+            #{month} as month,
+            #{day} as day,
+            count(*) as totCnt
+        from request_info ri join user
+                                  on ri.user_id = user.user_id
+        where hr_organ = #{department} and  concat('20', left(ri.create_date, 6)) =  concat(#{year}, #{month}, #{day});
+    </select>
+
+    <select id="selectAllByDepartmentLogin" parameterType="string" resultType="ByDepartmentCountDto">
+        select
+            hr_organ as department,
+            count(*) as totCnt
+        from request_info ri join user
+                                  on ri.user_id = user.user_id
+        where hr_organ = #{department};
     </select>
 
     <select id="selectDayAverageLogin" parameterType="string" resultType="DayAverageCountDto">

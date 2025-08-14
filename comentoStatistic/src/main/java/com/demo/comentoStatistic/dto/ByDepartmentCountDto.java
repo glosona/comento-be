@@ -5,8 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MonthByDepartmentDto {
+public class ByDepartmentCountDto extends LoginCountDto {
     private String department;
-    private String yearMonth;
-    private int totCnt;
 }

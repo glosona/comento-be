@@ -27,15 +27,26 @@ public class StatisticService {
         }
     }
 
+    public ByDepartmentCountDto getByDepartmentLogins(String year, String month, String day, String department) {
+
+        if (year == null && month == null && day == null) {
+            return statisticMapper.selectAllByDepartmentLogin(department);
+        }
+        else if (month == null && day == null) {
+            return statisticMapper.selectYearByDepartmentLogin(year, department);
+        } else if (day == null) {
+            return statisticMapper.selectYearMonthByDepartmentLogin(year, month, department);
+        } else {
+            return statisticMapper.selectYearMonthDayByDepartmentLogin(year, month, day, department);
+        }
+    }
+
     public DayAverageCountDto getDayAverageLogins() {
 
         return statisticMapper.selectDayAverageLogin();
     }
 
-    public MonthByDepartmentDto getMonthByDepartmentLogins(String year, String month, String department) {
 
-        return statisticMapper.selectMonthByDepartmentLogin(year + month, department);
-    }
 
     public NonRestdayCountDto getNonRestdayLogins(String fromDate, String toDate) {
         restdayService.getRestdaysInRange(fromDate, toDate);
