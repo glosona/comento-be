@@ -19,7 +19,6 @@ mybatis.mapper-locations= classpath:mapper/*.xml
 ## xml result typealias
 mybatis.type-aliases-package=com.demo.comentoStatistic.dto
 
-
 ## OpenAPI - KAI Rest day
-openapi.restday.key=
+openapi.restday.key=eGmcqPKbqgp6j6wGmq6BbavhMh0TFTaHagz2aSxWNXqAvOZrSXGkCwONghlAevIh6d0OPAQnW%2BaYCija3FKLkg%3D%3D
 openapi.restday.url=https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService
