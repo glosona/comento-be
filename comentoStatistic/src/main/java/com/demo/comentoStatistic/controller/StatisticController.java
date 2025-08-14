@@ -1,6 +1,7 @@
 package com.demo.comentoStatistic.controller;
 
-import com.demo.comentoStatistic.dto.YearCountDto;
+import com.demo.comentoStatistic.dto.LoginCountDto;
+import com.demo.comentoStatistic.dto.NonRestdayCountDto;
 import com.demo.comentoStatistic.service.StatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,23 +14,35 @@ public class StatisticController {
     @Autowired
     StatisticService statisticService;
 
+    @GetMapping()
+    public ResponseEntity<LoginCountDto>  getLoginCount(
+            @RequestParam String year,
+            @RequestParam(required = false) String month,
+            @RequestParam(required = false) String day
+            ) {
 
-    @RequestMapping(value = "/{year}", produces = "application/json")
-    @ResponseBody
-    public ResponseEntity<YearCountDto> getYearLoginCount(@PathVariable("year") String year) {
-
-        return ResponseEntity.ok(statisticService.getYearLogins(year));
+        if (month == null && day == null) {
+            return ResponseEntity.ok(statisticService.getYearLogins(year));
+        } else if (day == null) {
+            return ResponseEntity.ok(statisticService.getYearMonthLogins(year, month));
+        } else {
+            return ResponseEntity.ok(statisticService.getYearMonthDayLogins(year, month, day));
+        }
     }
 
-    @RequestMapping(value = "/{year}/{month}", produces = "application/json")
-    @ResponseBody
-    public Object getYearMonthLoginCount(@PathVariable("year") String year, @PathVariable("month") String month) {
+//    @GetMapping("department")
+//    public Object getLoginCountByDepartment(
+//            @RequestParam String name,
+//            @RequestParam(required = false) String year,
+//            @RequestParam(required = false, defaultValue = "01") String month,
+//            @RequestParam(required = false, defaultValue = "01") String day
+//    ){
+//
+//    }
 
-        return ResponseEntity.ok(statisticService.getYearMonthLogins(year, month));
-    }
 
     @GetMapping("/nonRestday")
-    public Object getNonRestdayLoginCount(
+    public ResponseEntity<NonRestdayCountDto>  getNonRestdayLoginCount(
             @RequestParam String fromDate,
             @RequestParam String toDate) {
 
@@ -37,7 +50,7 @@ public class StatisticController {
     }
 
     @GetMapping("/nonRestday/all")
-    public Object getAllNonRestdayLoginCount() {
+    public ResponseEntity<NonRestdayCountDto> getAllNonRestdayLoginCount() {
 
         return ResponseEntity.ok(statisticService.getAllNonRestdayLogins());
     }

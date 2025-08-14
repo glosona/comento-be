@@ -5,32 +5,31 @@
 
 <mapper namespace="com.demo.comentoStatistic.dao.StatisticMapper">
 
-    <select id="selectYearLogin" parameterType="string" resultType="YearCountDto">
-        select concat('20', #{year}) as year, count(*) as totCnt
+    <select id="selectYearLogin" parameterType="LoginCountDto" resultType="LoginCountDto">
+        select #{year} as year, count(*) as totCnt
         from statistic.request_info ri
-        where left(ri.create_date, 2) = #{year};
+        where concat('20', left(ri.create_date, 2)) = #{year};
     </select>
 
 
-    <select id="selectYearMonthLogin" parameterType="string" resultType="YearMonthCountDto">
-        select concat('20', #{yearMonth}) as yearMonth, count(*) as totCnt
-        from statistic.request_info ri
-        where left(ri.create_date, 4) = #{yearMonth};
-    </select>
-
-
-    <select id="selectYearMonthDayLogin" parameterType="string" resultType="DayCountDto">
-        select concat('20', #{yearMonthDay}) as yearMonthDay, count(*) as totCnt
-        from statistic.request_info ri
-        where left(ri.create_date, 6) = #{yearMonthDay};
-    </select>
-
-    <select id="selectDayAverageLogin" parameterType="string" resultType="DayAverageCountDto">
+    <select id="selectYearMonthLogin" parameterType="LoginCountDto" resultType="LoginCountDto">
         select
-            count(*) as totCnt,
-            count(distinct left(create_date, 6)) as totDay,
-            round(count(*) * 1.0 / count(distinct left(create_date, 6)), 2) as dayAverage
-        from statistic.request_info ri;
+            #{year} as year,
+            #{month} as month,
+            count(*) as totCnt
+        from statistic.request_info ri
+        where concat('20', left(ri.create_date, 4)) = concat(#{year}, #{month});
+    </select>
+
+
+    <select id="selectYearMonthDayLogin" parameterType="LoginCountDto" resultType="LoginCountDto">
+        select
+            #{year} as year,
+            #{month} as month,
+            #{day} as day,
+            count(*) as totCnt
+        from statistic.request_info ri
+        where concat('20', left(ri.create_date, 6)) =  concat(#{year}, #{month}, #{day});
     </select>
 
     <select id="selectMonthByDepartmentLogin" parameterType="string" resultType="MonthByDepartmentDto">
@@ -39,8 +38,16 @@
             concat('20', #{yearMonth}) as yearMonth,
             count(#{yearMonth}) as totCnt
         from request_info ri join user
-        on ri.user_id = user.user_id
+                                  on ri.user_id = user.user_id
         where hr_organ = #{department} and left(ri.create_date, 4) = #{yearMonth};
+    </select>
+
+    <select id="selectDayAverageLogin" parameterType="string" resultType="DayAverageCountDto">
+        select
+            count(*) as totCnt,
+            count(distinct left(create_date, 6)) as totDay,
+            round(count(*) * 1.0 / count(distinct left(create_date, 6)), 2) as dayAverage
+        from statistic.request_info ri;
     </select>
 
     <select id="selectNonRestdayLogin" parameterType="string" resultType="NonRestdayCountDto">

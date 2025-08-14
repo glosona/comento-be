@@ -17,29 +17,29 @@ public class StatisticService {
     RestdayService restdayService;
 
 
-    public YearCountDto getYearLogins(String year){
+    public LoginCountDto getYearLogins(String year) {
 
         return statisticMapper.selectYearLogin(year);
     }
 
-    public YearMonthCountDto getYearMonthLogins(String year, String month){
+    public LoginCountDto getYearMonthLogins(String year, String month) {
 
-        return statisticMapper.selectYearMonthLogin(year+month);
+        return statisticMapper.selectYearMonthLogin(year, month);
     }
 
-    public DayCountDto getYearMonthDayLogins(String year, String month, String day){
+    public LoginCountDto getYearMonthDayLogins(String year, String month, String day) {
 
-        return statisticMapper.selectYearMonthDayLogin(year+month+day);
+        return statisticMapper.selectYearMonthDayLogin(year, month, day);
     }
 
-    public DayAverageCountDto getDayAverageLogins(){
+    public DayAverageCountDto getDayAverageLogins() {
 
         return statisticMapper.selectDayAverageLogin();
     }
 
-    public MonthByDepartmentDto getMonthByDepartmentLogins(String year, String month, String department){
+    public MonthByDepartmentDto getMonthByDepartmentLogins(String year, String month, String department) {
 
-        return statisticMapper.selectMonthByDepartmentLogin(year+month, department);
+        return statisticMapper.selectMonthByDepartmentLogin(year + month, department);
     }
 
     public NonRestdayCountDto getNonRestdayLogins(String fromDate, String toDate) {
@@ -48,7 +48,7 @@ public class StatisticService {
         return statisticMapper.selectNonRestdayLogin(fromDate, toDate);
     }
 
-    public NonRestdayCountDto getAllNonRestdayLogins(){
+    public NonRestdayCountDto getAllNonRestdayLogins() {
         Map<String, String> dateMap = statisticMapper.selectMinMaxCreateDate();
         String fromDate = dateMap.get("fromDate");
         String toDate = dateMap.get("toDate");
