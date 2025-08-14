@@ -1,3 +1,31 @@
+# 4주차(08/14/25)
+## [과제보고]
+1. 5가지 API 개발 및 리팩토링
+   1. `getLoginCount`: `year`, `month`, `day` 파라미터를 입력받아 연도별/월별/일자별 로그인 수 반환. year은 필수
+   2. `getLoginCountByDepartment`: 가독성을 위해 부서별 로그인 수 조회 분리. date 부분은 옵션
+   3. `getDayAverage`: 일자 평균 로그인 수 조회. (모든 로그인 기록) / (총 일자 수) 으로 계산
+   4. `getNonRestdayLoginCount`: 쉬는 날 제외한 로그인 수 반환. 주말뿐만 아니라 공공API 연동하여 대한민국 공휴일도 제외함. `fromDate`, `toDate`로 범위 설정 가능
+   5. `getAllNonRestdayLoginCount`: 범위 설정 없이 모든 기록에서 쉬는 날 제외한 로그인 수 반환
+       ```
+          /api/v1/logins?year=2024
+          /api/v1/logins/department/A
+          /api/v1/logins/dayAverage
+          /api/v1/logins/nonRestday
+          /api/v1/logins/nonRestday/all
+       ```
+2. 한국천문연구원 공공API 연동
+   1. 특정 월의 대한민국 공휴일 정보 반환
+   2. 공휴일 이름, 날짜를 DB에 저장하는 `getRestdaysInRange` 서비스 로직 작성
+   3. 테스트용 API 작성
+      ```
+      /api/v1/restday
+      /api/v1/restday/items
+      ```
+3. @ControllerAdvice으로 validation 작성
+   1. year, month, day 검토
+   2. fromDate, toDate 검토
+4. API가이드 문서 보완
+
 # 3주차(08/07/25)
 ## 3-1) 스프링 vs 스프링부트
 각각 환경설정을 진행하면서 느낀 차이점/공통점을 정리했다.
