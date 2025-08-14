@@ -1,5 +1,6 @@
 package com.demo.comentoStatistic.controller;
 
+import com.demo.comentoStatistic.dto.DayAverageCountDto;
 import com.demo.comentoStatistic.dto.LoginCountDto;
 import com.demo.comentoStatistic.dto.NonRestdayCountDto;
 import com.demo.comentoStatistic.service.StatisticService;
@@ -34,6 +35,13 @@ public class StatisticController {
 
         return ResponseEntity.ok(statisticService.getByDepartmentLogins(year, month, day, department));
     }
+
+    @GetMapping("dayAverage")
+    public ResponseEntity<DayAverageCountDto> getDayAverage() {
+
+        return ResponseEntity.ok(statisticService.getDayAverageLogins());
+    }
+
 
     @GetMapping("nonRestday")
     public ResponseEntity<NonRestdayCountDto>  getNonRestdayLoginCount(
